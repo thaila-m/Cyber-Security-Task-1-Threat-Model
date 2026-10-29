@@ -176,3 +176,75 @@ Threat modelling is an ongoing process. The model should be updated whenever the
 **Project type:** Defensive cybersecurity assessment  
 **Scope:** Hypothetical student portal  
 **Testing status:** Proposed controls and verification steps; no live testing performed.
+## 10. Defensive Lab Brief and Incident Analysis
+
+### 10.1 Lab Environment
+
+The assessment uses a fictional Student Portal Web Application running only on localhost or an isolated virtual machine. All testing must remain within the authorized lab environment. External systems must not be scanned.
+
+IP addresses and authentication events used for analysis should be synthetic or appropriately anonymized. Secrets and personal information must be redacted from screenshots and reports.
+
+### 10.2 Authentication-Log Analysis
+
+**Objective:** Establish a normal authentication baseline, identify clusters of failed logins, distinguish likely user mistakes from suspicious activity, and recommend suitable defensive controls.
+
+#### Analysis Procedure
+
+1. **Establish a baseline:** Count successful and failed login events and examine their distribution over time.
+2. **Identify failure clusters:** Group failed attempts by timestamp, source IP address, and account identifier.
+3. **Classify patterns:** A small number of isolated failures may indicate a mistyped password. Repeated failures against one account or attempts against many accounts in a short period may indicate suspicious activity.
+4. **Build a timeline:** Record the first and last event times, the number of failures, related successful logins, and any unusual changes.
+5. **Recommend controls:** Introduce rate limiting, progressive delays, appropriate account protections, alerts, and centralized authentication logging.
+
+These are analysis steps. Actual findings must be based on the supplied synthetic CSV rather than assumptions.
+
+### 10.3 Incident Timeline Template
+
+| Time | Event | Source | Observation | Assessment |
+|---|---|---|---|---|
+| To be determined | Failed login | Synthetic source IP | Record the number of failures | Pending analysis |
+| To be determined | Successful login | Synthetic source IP | Check for preceding failures | Pending analysis |
+| To be determined | Repeated failures | Synthetic source IP | Examine frequency and targeted accounts | Pending analysis |
+
+### 10.4 Detection and Rate-Limit Recommendations
+
+- Monitor repeated failed login attempts within a defined time window.
+- Alert on repeated failures across multiple accounts from the same source.
+- Investigate successful logins that follow unusual failure patterns.
+- Apply server-side rate limiting and progressive delays.
+- Use multi-factor authentication for administrator accounts.
+- Avoid permanent account lockouts that could be abused to deny service.
+- Record timestamps, outcomes, and relevant source information without logging passwords or session tokens.
+
+Thresholds should be selected using the normal login baseline and adjusted to reduce false positives.
+
+## 11. Threat-Model Assessment Template
+
+| Field | Details to record |
+|---|---|
+| Asset and owner | Identify the protected asset and responsible owner. |
+| Trust boundary and entry point | Identify where requests enter the system and cross trust boundaries. |
+| Threat scenario and precondition | Describe the possible attack and what must happen for it to succeed. |
+| Existing control and evidence | Record current safeguards and evidence that they work. |
+| Risk rating with rationale | Rate likelihood and impact, explaining the reason for each rating. |
+| Recommended mitigation and verification | Describe the fix and how it can be tested safely. |
+
+### Example Threat Assessment
+
+**Asset and owner:** Student academic records; portal administrator.
+
+**Trust boundary and entry point:** Student-facing web application and its database access boundary.
+
+**Threat scenario and precondition:** A student changes a record identifier in a request and attempts to view another student's marks. The issue could occur if the application does not check authorization for each record.
+
+**Existing control and evidence:** Not yet verified. The application should enforce server-side authorization checks.
+
+**Risk rating with rationale:** High potential impact because academic records may be disclosed. Likelihood requires assessment using the application's implementation and test evidence.
+
+**Recommended mitigation and verification:** Enforce server-side ownership checks for every record request. In an authorized test environment, use two test student accounts and verify that neither account can access the other's records.
+
+## 12. Conclusion
+
+This defensive lab extends the threat model with authentication-log analysis and a structured incident assessment. Establishing a baseline, reviewing suspicious failure patterns, recording a timeline, and verifying defensive controls helps improve the security of the fictional Student Portal.
+
+All findings must be supported by evidence from the authorized lab. No external systems should be scanned, and secrets or personal information must not appear in submitted evidence.
